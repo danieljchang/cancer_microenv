@@ -30,7 +30,7 @@ for col in categorical_cols:
     print(df[col].value_counts())
 
     plt.figure(figsize=(8, 5))
-    sns.countplot(y=df[col], order=df[col].value_counts().index, palette="viridis")
+    sns.countplot(y=df[col], order=df[col].value_counts().index, palette="tab10")
     plt.yticks(rotation=45)
     plt.title(f'Distribution of {col}')
     plt.tight_layout()
@@ -46,7 +46,7 @@ plt.savefig(f'./figures/histogram_A_oncogene.png')
 
 
 plt.figure(figsize=(10, 6))
-sns.boxplot(x='Disease_Status', y='Gene_A_Oncogene', data=df, palette="Pastel1")
+sns.boxplot(x='Disease_Status', y='Gene_A_Oncogene', data=df, palette="tab10")
 plt.title('Gene A Expression by Disease Status')
 plt.xlabel('Disease Status')
 plt.ylabel('Gene A (Oncogene) Expression')
@@ -64,7 +64,9 @@ sns.heatmap(
     cmap='coolwarm',
     cbar=True,
     linewidths=0.5,
-    linecolor='black'
+    linecolor='black',
+    yticklabels=45,
+    xticklabels=45
 )
 plt.title('Correlation Matrix of Numerical Features')
 plt.savefig(f'./figures/gene_heatmap.png')
@@ -112,7 +114,7 @@ print(f"Total variance explained by 2 components: {(pca.explained_variance_ratio
 
 plt.figure(figsize=(10, 8))
 sns.scatterplot(x='PC1', y='PC2', hue='Disease_Status', data=df_pca,
-                palette='bright', s=50, alpha=0.7)
+                palette='tab10', s=50, alpha=0.7)
 plt.title('PCA of Gene Expression Data (Colored by Disease Status)')
 plt.xlabel(f'Principal Component 1 ({pca.explained_variance_ratio_[0]*100:.2f}%)')
 plt.ylabel(f'Principal Component 2 ({pca.explained_variance_ratio_[1]*100:.2f}%)')
@@ -122,7 +124,7 @@ plt.savefig('./figures/pca.png')
 
 plt.figure(figsize=(10, 8))
 sns.scatterplot(x='PC1', y='PC2', hue='Cell_Type', data=df_pca,
-                palette='viridis', s=50, alpha=0.7)
+                palette='tab10', s=50, alpha=0.7)
 plt.title('PCA of Gene Expression Data (Colored by Cell Type)')
 plt.xlabel(f'Principal Component 1 ({pca.explained_variance_ratio_[0]*100:.2f}%)')
 plt.ylabel(f'Principal Component 2 ({pca.explained_variance_ratio_[1]*100:.2f}%)')
