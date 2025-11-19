@@ -65,9 +65,10 @@ sns.heatmap(
     cbar=True,
     linewidths=0.5,
     linecolor='black',
-    yticklabels=45,
-    xticklabels=45
 )
+plt.yticks(rotation=45) 
+plt.xticks(rotation=45)
+plt.tight_layout()
 plt.title('Correlation Matrix of Numerical Features')
 plt.savefig(f'./figures/gene_heatmap.png')
 
