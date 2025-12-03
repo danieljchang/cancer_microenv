@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
-    f1_score, accuracy_score, precision_score, recall_score, classification_report
+    f1_score, accuracy_score, precision_score, recall_score, classification_report, balanced_accuracy_score
 )
 from omegaconf import OmegaConf
 
@@ -14,6 +14,7 @@ class CancerPredictor:
         "f1_macro": lambda y, p: f1_score(y, p, average="macro"),
         "f1_weighted": lambda y, p: f1_score(y, p, average="weighted"),
         "accuracy": lambda y, p: accuracy_score(y, p),
+        "balanced_accuracy": lambda y, p: balanced_accuracy_score(y, p),
         "precision_macro": lambda y, p: precision_score(y, p, average="macro"),
         "recall_macro": lambda y, p: recall_score(y, p, average="macro"),
     }
