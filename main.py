@@ -57,9 +57,18 @@ def main():
     print(f"\n{'='*50}")
     print("Summary")
     print("="*50)
+    
+    header = f"{'Model':25s}"
+    for metric in predictor.metrics:
+        header += f" | Val {metric:12s} | Test {metric:12s}"
+    print(header)
+    print("-" * len(header))
+    
     for name, res in results.items():
-        print(f"{name:25s} | Val F1: {res['val']['f1_macro']:.4f} | Test F1: {res['test']['f1_macro']:.4f}")
-
+        row = f"{name:25s}"
+        for metric in predictor.metrics:
+            row += f" | {res['val'][metric]:16.4f} | {res['test'][metric]:16.4f}"
+        print(row)
 
 if __name__ == "__main__":
     main()
