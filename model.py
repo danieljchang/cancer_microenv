@@ -19,7 +19,7 @@ class CancerPredictor:
         "recall_macro": lambda y, p: recall_score(y, p, average="macro"),
     }
 
-    def __init__(self, config_path):
+    def __init__(self, config_path, features=None, remain=None):
         
         self.config = OmegaConf.load(config_path)
 
@@ -34,6 +34,9 @@ class CancerPredictor:
         self.test_ratio = self.config.training.test_ratio
         self.val_ratio = self.config.training.val_ratio
         self.metrics = list(self.config.training.get("metrics", ["f1_macro"]))
+
+        self.features = features
+        self.remain = remain
 
         self.load_data()
     
@@ -59,15 +62,14 @@ class CancerPredictor:
             stratify=y
         )
 
-        # TODO: we can add more features in like: PCA, UMAP
-        # self.make_features(features, remain)
-
         self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(
             self.X_temp, self.y_temp,
             test_size=self.val_ratio,
             random_state=self.random_state,
             stratify=self.y_temp
         )
+
+        self.make_features(self.features, self.remain)
 
         return self
 
@@ -110,14 +112,24 @@ class CancerPredictor:
         return results
 
 
-    def make_features(self, features: list, remain):
+    def make_features(self, features, remain):
         """
         features: list of functions, each func(X) -> new features (n_samples, ?)
+                None = no transformation
         remain: 
             - 1: keep all original features
             - []: keep none
             - [0, 2, ...]: keep specific columns
+            - None: keep all (same as 1)
         """
+        if features is None and remain is None:
+            return self
+        
+        if features is None:
+            features = []
+        if remain is None:
+            remain = 1
+        
         def _transform(X):
             parts = []
             
@@ -154,4 +166,3 @@ if __name__ == "__main__":
     model = RandomForestClassifier(random_state=42)
     predictor.train_eval(model)
     predictor.test_eval()
-
