@@ -1,0 +1,59 @@
+task: "cell_type"
+verobose: false
+
+data:
+  path: "./data/processed.csv"
+
+  features:
+    gene_cols:
+      - "Gene_E_Housekeeping"
+      - "Gene_A_Oncogene"
+      - "Gene_B_Immune"
+      - "Gene_C_Stromal"
+      - "Gene_D_Therapy"
+      - "Pathway_Score_Inflam"
+
+  targets:
+    cell_type:
+      cols:
+        - "Cell_Type_Cancer"
+        - "Cell_Type_Fibroblast"
+        - "Cell_Type_T_Cell"
+      class_names:
+        - "Cancer"
+        - "Fibroblast"
+        - "T_Cell"
+    disease_status:
+      cols:
+        - "Disease_Status_Healthy_Control"
+        - "Disease_Status_Tumor"
+      class_names:
+        - "Healthy_Control"
+        - "Tumor"
+
+training:
+  test_ratio: 0.2
+  val_ratio: 0.1
+  random_state: 42
+
+  metrics:
+    - "accuracy"
+    - "f1_macro"
+    - "f1_weighted"
+  
+  models:
+    logistic_regression:
+      C: 1.0
+      max_iter: 1000
+      solver: "lbfgs"
+    
+    random_forest:
+      n_estimators: 100
+      max_depth: 10
+      min_samples_split: 2
+    
+    xgboost:
+      n_estimators: 100
+      max_depth: 6
+      learning_rate: 0.1
+      objective: "multi:softmax"
